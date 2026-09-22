@@ -520,3 +520,104 @@ a { color: inherit; }
 }
 
 .photo__actions { margin-top: 0.3rem; justify-self: start; }
+
+/* ---------------------------------------------------------------- phones */
+
+a, button { -webkit-tap-highlight-color: rgb(138 90 43 / 18%); }
+
+/* Drawn edge to edge (viewport-fit=cover), so keep content clear of the
+   notch and the home indicator. */
+.topbar {
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+
+.main {
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+}
+
+.signin {
+  padding:
+    max(24px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    calc(24px + env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+}
+
+.toasts { bottom: calc(1.25rem + env(safe-area-inset-bottom)); }
+
+/* Locked while the photo viewer is open, so the page behind does not scroll. */
+body.is-locked { overflow: hidden; }
+
+@media (max-width: 40rem) {
+  /* Two tidy rows: name and sign-out on top, the tabs scrolling underneath. */
+  .topbar { gap: 0.5rem 0.75rem; }
+  .brand { order: 1; }
+  .topbar__end { order: 2; }
+  .whoami { display: none; }
+
+  .nav {
+    order: 3;
+    flex-basis: 100%;
+    margin: 0 -0.35rem;
+    padding: 0 0.35rem 0.15rem;
+    scrollbar-width: none;
+  }
+
+  .nav::-webkit-scrollbar { display: none; }
+}
+
+@media (max-width: 30rem) {
+  .button { justify-self: stretch; text-align: center; }
+  .form__grid { grid-template-columns: 1fr; }
+}
+
+/* Finger-sized targets wherever there is no mouse. */
+@media (pointer: coarse) {
+  .icon-button {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    display: grid;
+    place-items: center;
+  }
+
+  .nav__link { padding: 0.45rem 0.85rem; }
+  .heart { padding: 0.35rem 0.9rem; }
+  .link--quiet { padding: 0.4rem 0; }
+  .past summary { padding: 0.4rem 0; }
+}
+
+/* The viewer's arrows sit on top of the picture rather than stealing width. */
+@media (max-width: 34rem) {
+  .lightbox {
+    grid-template-columns: 1fr;
+    padding:
+      calc(3rem + env(safe-area-inset-top)) 0.5rem
+      calc(1.5rem + env(safe-area-inset-bottom));
+  }
+
+  .lightbox__image,
+  .lightbox__caption { grid-column: 1; }
+
+  .lightbox__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgb(0 0 0 / 45%);
+  }
+
+  .lightbox__nav--prev { left: 0.5rem; }
+  .lightbox__nav--next { right: 0.5rem; }
+}
+
+.lightbox { overscroll-behavior: contain; }
+.lightbox__image { touch-action: pan-y; }
+
+.button--quiet {
+  background: var(--bg-tint);
+  color: var(--text);
+  border: 1px solid var(--border);
+}

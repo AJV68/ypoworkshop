@@ -76,7 +76,7 @@ async function boot() {
 function signInView() {
   const email = el('input', {
     class: 'input', type: 'email', required: true, autocomplete: 'email',
-    placeholder: 'you@example.com',
+    inputMode: 'email', placeholder: 'you@example.com',
   });
   const submit = el('button', { class: 'button button--wide', type: 'submit' }, 'Email me a sign-in link');
   const note = el('p', { class: 'form__note' });
@@ -87,10 +87,28 @@ function signInView() {
     note,
   );
 
+  // The emailed link opens in the phone's browser. If someone added this site
+  // to their home screen, that window is a separate container and would stay
+  // signed out — so the same email also carries a code they can type here.
+  const code = el('input', {
+    class: 'input', type: 'text', inputMode: 'numeric', autocomplete: 'one-time-code',
+    maxLength: 10, placeholder: '123456',
+  });
+  const verify = el('button', { class: 'button button--wide button--quiet', type: 'submit' }, 'Sign in with code');
+  const codeNote = el('p', { class: 'form__note' });
+
+  const codeForm = el('form', { class: 'signin__form', hidden: true },
+    el('label', { class: 'field' },
+      el('span', {}, 'Or type the code from that email'),
+      code),
+    verify,
+    codeNote,
+  );
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     submit.disabled = true;
-    note.textContent = 'Sending…';
+    note.textContent = 'Sending\u2026';
     note.dataset.tone = '';
 
     const { error } = await supabase.auth.signInWithOtp({
@@ -106,8 +124,37 @@ function signInView() {
       return;
     }
 
-    note.textContent = 'Check your email. The link signs you straight in and works for one hour.';
+    note.textContent = 'Check your email. Tap the link, or type the code below. Both last one hour.';
     note.dataset.tone = 'ok';
+    codeForm.hidden = false;
+    code.focus();
+  });
+
+  codeForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const token = code.value.replace(/\D/g, '');
+    if (!token) return;
+
+    verify.disabled = true;
+    codeNote.textContent = 'Checking\u2026';
+    codeNote.dataset.tone = '';
+
+    const { error } = await supabase.auth.verifyOtp({
+      email: email.value.trim().toLowerCase(),
+      token,
+      type: 'email',
+    });
+
+    verify.disabled = false;
+
+    if (error) {
+      codeNote.textContent = 'That code did not work. Check it, or tap the link in the email instead.';
+      codeNote.dataset.tone = 'error';
+      return;
+    }
+
+    codeNote.textContent = '';
+    // onAuthStateChange picks the new session up and re-renders.
   });
 
   return el('div', { class: 'signin' },
@@ -118,6 +165,7 @@ function signInView() {
         'Where everyone is, what everyone is up to, and the pictures to go with it. '
         + 'Sign in with the email address your invitation went to.'),
       form,
+      codeForm,
     ));
 }
 

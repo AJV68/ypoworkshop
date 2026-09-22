@@ -185,6 +185,7 @@ function openLightbox(photos, urls, startIndex) {
 
   const close = () => {
     overlay.remove();
+    document.body.classList.remove('is-locked');
     document.removeEventListener('keydown', onKey);
   };
 
@@ -205,7 +206,27 @@ function openLightbox(photos, urls, startIndex) {
     caption,
   );
 
+  // Swiping sideways moves between pictures; a mostly-vertical drag is left
+  // alone so the caption can still be scrolled.
+  let touchStart = null;
+
+  overlay.addEventListener('touchstart', (event) => {
+    const touch = event.changedTouches[0];
+    touchStart = { x: touch.clientX, y: touch.clientY };
+  }, { passive: true });
+
+  overlay.addEventListener('touchend', (event) => {
+    if (!touchStart) return;
+    const touch = event.changedTouches[0];
+    const dx = touch.clientX - touchStart.x;
+    const dy = touch.clientY - touchStart.y;
+    touchStart = null;
+
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
   show();
+  document.body.classList.add('is-locked');
   document.body.append(overlay);
   document.addEventListener('keydown', onKey);
 }

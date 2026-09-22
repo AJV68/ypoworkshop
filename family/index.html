@@ -2,11 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="robots" content="noindex, nofollow" />
     <title>The Family Site</title>
     <meta name="description" content="A private site for our family." />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏡</text></svg>" />
+
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <meta name="theme-color" content="#8a5a2b" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)" />
+
+    <!-- Home-screen install on iOS, which ignores the manifest for these. -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Family" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+
+    <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png" />
     <link rel="preconnect" href="https://mkjegaxglmqxpeqhmgcs.supabase.co" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -15,7 +26,7 @@
       <div class="signin">
         <div class="signin__card">
           <h1 class="signin__title">The Family Site</h1>
-          <p class="signin__lede">Loading…</p>
+          <p class="signin__lede">Loading&hellip;</p>
         </div>
       </div>
     </div>
