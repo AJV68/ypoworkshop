@@ -37,6 +37,10 @@
 
 * { box-sizing: border-box; }
 
+/* `display: grid` on a component beats the browser's own [hidden] rule, which
+   would otherwise leave hidden fields and forms on screen. */
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   background: var(--bg);
@@ -573,6 +577,12 @@ body.is-locked { overflow: hidden; }
 @media (max-width: 30rem) {
   .button { justify-self: stretch; text-align: center; }
   .form__grid { grid-template-columns: 1fr; }
+
+  /* Stack every row the same way. Left to wrap, a long line pushes the date
+     onto its own line for one person and not the next, which reads as a
+     mistake. */
+  .row { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+  .row__end { width: 100%; justify-content: space-between; }
 }
 
 /* Finger-sized targets wherever there is no mouse. */
