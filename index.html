@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YPO Workshop</title>
+    <meta name="description" content="A starter website for the YPO Workshop, connected to Supabase and deployed on Vercel." />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <p class="eyebrow">YPO Workshop</p>
+        <h1>It's live.</h1>
+        <p class="lede">
+          A starter site running on Vercel, reading and writing real data in
+          Supabase. Leave a note below and it saves to the database.
+        </p>
+        <p class="status" id="status" data-state="loading">Connecting to Supabase&hellip;</p>
+      </header>
+
+      <section class="card" aria-labelledby="signform-heading">
+        <h2 id="signform-heading">Sign the guestbook</h2>
+        <form id="entry-form" autocomplete="off">
+          <div class="field">
+            <label for="name">Your name</label>
+            <input id="name" name="name" type="text" maxlength="60" required placeholder="Alex" />
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" maxlength="280" rows="3" required placeholder="Hello from the workshop"></textarea>
+          </div>
+          <button type="submit" id="submit">Add entry</button>
+          <p class="form-note" id="form-note" role="status"></p>
+        </form>
+      </section>
+
+      <section class="card" aria-labelledby="entries-heading">
+        <h2 id="entries-heading">Recent entries</h2>
+        <ul class="entries" id="entries">
+          <li class="placeholder">Loading&hellip;</li>
+        </ul>
+      </section>
+
+      <footer class="footer">
+        <p>Built for the YPO Workshop &middot; Supabase + Vercel</p>
+      </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
